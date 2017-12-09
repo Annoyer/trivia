@@ -1,9 +1,14 @@
 package kata.trivia.dto;
 
+import kata.trivia.model.User;
+import kata.trivia.websocket.WebSocketServer;
+
 /**
  * Created by benwu on 14-5-28.
+ * 游戏进行时的玩家
  */
 public class Player {
+    // 棋盘上每格对应的题目分类，也可以不写死
     public static final int MAX_NUMBER_OF_PLACE = 12;
     public static final int CATEGORY_POP_1 = 0;
     public static final int CATEGORY_POP_2 = 4;
@@ -18,13 +23,36 @@ public class Player {
     public static final String SCIENCE = "Science";
     public static final String SPORTS = "Sports";
     public static final String ROCK = "Rock";
+
     private String playerName;
     private int place = 0;
     private int sumOfGoldCoins = 0;
     private boolean isInPenaltyBox = false;
 
-    public Player(String playerName) {
+    //添加的属性
+    private boolean isReady = false;//by j: 玩家是否同意游戏开始
+    private User user; //by j: Player是游戏时的玩家角色，User是对应的用户，Player生成时初始化绑定
+
+    /**
+     * by j: 构造时必须绑定对应的User
+     * @param playerName username
+     * @param user user
+     */
+    public Player(String playerName,User user) {
         this.playerName = playerName;
+        this.user = user;
+    }
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void ready() {
+        isReady = true;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override
@@ -32,6 +60,7 @@ public class Player {
         return this.playerName;
     }
 
+    //循环走的
     public void moveForwardSteps(int steps) {
         this.place += steps;
         if (this.place > MAX_NUMBER_OF_PLACE - 1) this.place -= MAX_NUMBER_OF_PLACE;
@@ -73,4 +102,5 @@ public class Player {
     public void sentToPenaltyBox() {
         this.isInPenaltyBox = true;
     }
+
 }
