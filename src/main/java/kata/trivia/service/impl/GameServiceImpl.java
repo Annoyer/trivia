@@ -18,7 +18,16 @@ public class GameServiceImpl implements GameService {
 
     public List<Game> getAllTables() {
         List<Game> games = new ArrayList<Game>();
-        games.addAll(tables.values());
+        Game itable = null;
+        // 限制最多只有5桌
+        for (int i = 0; i < 5; i++) {
+            if ((itable = tables.get(i))!=null){
+                games.add(itable);
+            } else {
+                games.add(new Game(i));
+            }
+        }
+        //games.addAll(tables.values());
         return games;
     }
 

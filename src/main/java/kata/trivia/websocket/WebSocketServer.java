@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by joy12 on 2017/12/9.
  *   websocket服务端
- *
+ *  负责给游戏中的每个客户端广播消息
  */
 @ServerEndpoint(value="/websocket/{userId}",configurator = SpringConfigurator.class)
 public class WebSocketServer {
