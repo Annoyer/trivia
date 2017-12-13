@@ -10,10 +10,10 @@ import java.util.*;
 public class GameRunner {
     private static boolean isGameStillInProgress;
     //之前测试用的
-    private static User jungkook = new User("Jungkook");
-    private static User jimin = new User("Jimin");
-    private static User jin = new User("Jin");
-    private static User j = new User("J");
+//    private static User jungkook = new User("Jungkook");
+//    private static User jimin = new User("Jimin");
+//    private static User jin = new User("Jin");
+//    private static User j = new User("J");
 
     private static List<Question> popQuestions = new LinkedList<Question>();
     private static List<Question> scienceQuestions = new LinkedList<Question>();
