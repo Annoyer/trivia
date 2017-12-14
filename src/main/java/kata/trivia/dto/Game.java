@@ -48,6 +48,34 @@ public class Game {
         logToAFile();
     }
 
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setTableId(int tableId) {
+        this.tableId = tableId;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+
     /**
      * by j: 添加玩家，增加了user参数
      */

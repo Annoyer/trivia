@@ -26,6 +26,7 @@ public class GameController {
 
     /**
      * @return 所有游戏桌页面
+     * ok
      */
     @RequestMapping(value = "/tables")
     public ModelAndView toTables(){
@@ -49,7 +50,7 @@ public class GameController {
      * 玩家选桌
      * @param tableId 桌号
      * @param session 获取userId
-     * @return 若result为success，则在ajax的回调函数中建立websocket连接
+     * @return 若result为success，则在进入游戏桌页面时建立websocket连接
      *          否则，alert data.error
      */
     @RequestMapping(value = "/chooseTable",method = RequestMethod.POST)
@@ -57,6 +58,11 @@ public class GameController {
     public Result chooseTable(@RequestParam("tableId") Integer tableId, HttpSession session){
         Result result = new Result();
         User user = (User) session.getAttribute("user");
+        if (user==null){
+            user = new User("user1");
+            user.setId(1);
+            session.setAttribute("user",user);
+        }
         if (gameService.userChooseTable(tableId,user)){
             result.setSuccess(true);
         } else {
