@@ -92,7 +92,7 @@ public class Game {
      */
     public void setReady(Integer userId) {
         for (Player player : players) {
-            if (player.getUser().getId().equals(userId)){
+            if (player.getUser().getId()==userId){
                 player.ready();
                 logger.info(player.getUser().getUsername() + " was ready");
                 return;

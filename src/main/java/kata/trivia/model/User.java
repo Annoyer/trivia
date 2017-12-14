@@ -6,11 +6,39 @@ import kata.trivia.websocket.WebSocketServer;
  * Created by joy12 on 2017/12/3.
  */
 public class User {
-    private Integer id;
-    private String username;
 
-    public User(String username) {
+
+    private int id;
+    private String password;
+    private String username;
+    private int level;
+    private int winCount;
+    private int loseCount;
+
+    public User(int id, String password, String username, int level, int winCount, int loseCount) {
+        this.id = id;
+        this.password = password;
         this.username = username;
+        this.level = level;
+        this.winCount = winCount;
+        this.loseCount = loseCount;
+    }
+
+    public User(){
+    }
+
+
+    public User(String username,String password) {
+        this.username=username;
+        this.password=password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -21,11 +49,35 @@ public class User {
         this.username = username;
     }
 
-    public Integer getId() {
-        return id;
+    public String getPassword() {
+        return password;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getWinCount() {
+        return winCount;
+    }
+
+    public void setWinCount(int winCount) {
+        this.winCount = winCount;
+    }
+
+    public int getLoseCount() {
+        return loseCount;
+    }
+
+    public void setLoseCount(int loseCount) {
+        this.loseCount = loseCount;
     }
 }

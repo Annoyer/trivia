@@ -36,7 +36,7 @@
         <!--配置mybatis全局配置文件-->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!--扫描entity包，使用别名，这样就不用写全包名了-->
-        <property name="typeAliasesPackage" value="com.carcenter.model"/>
+        <property name="typeAliasesPackage" value="kata.trivia.model"/>
         <!--扫描sql配置文件 mapper-->
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
@@ -45,7 +45,7 @@
         <!--注入sqlSessionFactory-->
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <!--给出需要扫描Dao接口包-->
-        <property name="basePackage" value="com.carcenter.dao"/>
+        <property name="basePackage" value="kata.trivia.dao"/>
     </bean>
 
     <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"%>
-<%@include file="common/const.jsp" %>
+<%@include file="../common/const.jsp" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -16,6 +16,7 @@
 </html>
 <script type="text/javascript">
     function chooseTable(id) {
+        alert(id);
         $.ajax({
             method: 'POST',
             url: '${path}/game/chooseTable',
@@ -25,10 +26,13 @@
             dataType: "json",
             success: function (data) {
                 if (data.success==true){
-                    window.location.href='${path}/game/game_page?tableId='+id;
+                    window.location.href='${path}/game/gamePage?tableId='+id;
                 } else {
                     alert(data.error);
                 }
+            },
+            error:function () {
+                alert("请求出错！");
             }
         });
     }

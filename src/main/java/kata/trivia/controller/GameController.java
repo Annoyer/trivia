@@ -3,6 +3,7 @@ package kata.trivia.controller;
 import kata.trivia.dto.Result;
 import kata.trivia.model.User;
 import kata.trivia.service.GameService;
+import kata.trivia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,8 @@ public class GameController {
 
     @Autowired
     private GameService gameService;
+    @Autowired
+    private UserService userService;
 
     /**
      * @return 所有游戏桌页面
