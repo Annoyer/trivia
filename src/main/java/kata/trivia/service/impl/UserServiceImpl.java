@@ -15,7 +15,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
 
-    @Override
     public User signup(User user){
         if(userDao.getUserByNickName(user.getUsername())!=null){
             return null;
@@ -25,7 +24,8 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserById(id);
         }
     }
-    @Override
+
+
     public User login(User user){
         return userDao.getUser(user.getUsername(),user.getPassword());
     }

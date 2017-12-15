@@ -61,15 +61,15 @@ public class GameRunner {
 
     }
 
-    public static void loadQuestion(){
-        for (int i=0; i<10; i++){
-            popQuestions.add(new Question("pop"+i,"pop"+i));
-            scienceQuestions.add(new Question("science"+i,"science"+i));
-            sportsQuestions.add(new Question("sports"+i,"sports"+i));
-            rockQuestions.add(new Question("rock"+i,"rock"+i));
-        }
-
-    }
+//    public static void loadQuestion(){
+//        for (int i=0; i<10; i++){
+//            popQuestions.add(new Question("pop"+i,"pop"+i));
+//            scienceQuestions.add(new Question("science"+i,"science"+i));
+//            sportsQuestions.add(new Question("sports"+i,"sports"+i));
+//            rockQuestions.add(new Question("rock"+i,"rock"+i));
+//        }
+//
+//    }
 
     public static String scannerIn(){
         Scanner sc = new Scanner(System.in);

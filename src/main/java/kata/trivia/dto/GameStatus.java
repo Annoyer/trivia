@@ -18,12 +18,21 @@ public class GameStatus {
     private int status;
     private int dice;
     private boolean isFirstRound = true;
+    private Player winner;
 
     public GameStatus(Game game) {
         tableId = game.getTableId();
         players = game.getPlayers();
         currentPlayerId = game.getCurrentPlayerId();
         status = game.getStatus();
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
     }
 
     public List<Player> getPlayers() {

@@ -33,6 +33,42 @@ public class Player {
     private boolean isReady = false;//by j: 玩家是否同意游戏开始
     private User user; //by j: Player是游戏时的玩家角色，User是对应的用户，Player生成时初始化绑定
 
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public void setPlace(int place) {
+        this.place = place;
+    }
+
+    public int getSumOfGoldCoins() {
+        return sumOfGoldCoins;
+    }
+
+    public void setSumOfGoldCoins(int sumOfGoldCoins) {
+        this.sumOfGoldCoins = sumOfGoldCoins;
+    }
+
+    public void setInPenaltyBox(boolean inPenaltyBox) {
+        isInPenaltyBox = inPenaltyBox;
+    }
+
+    public void setIsReady(boolean ready) {
+        isReady = ready;
+    }
+
+    public static int getMaxNumberOfPlace() {
+        return MAX_NUMBER_OF_PLACE;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     /**
      * by j: 构造时必须绑定对应的User
      * @param playerName username
@@ -43,12 +79,8 @@ public class Player {
         this.user = user;
     }
 
-    public boolean isReady() {
+    public boolean getIsReady() {
         return isReady;
-    }
-
-    public void ready() {
-        isReady = true;
     }
 
     public User getUser() {

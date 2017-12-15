@@ -130,4 +130,14 @@
     <session-timeout>15</session-timeout>
   </session-config>
 
+  <!-- 登录过滤器 -->
+  <filter>
+    <filter-name>loginFilter</filter-name>
+    <filter-class>kata.trivia.fliter.LoginFliter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>loginFilter</filter-name>
+    <url-pattern>/game/*</url-pattern>
+  </filter-mapping>
+
 </web-app>

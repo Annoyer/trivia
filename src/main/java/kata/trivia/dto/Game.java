@@ -23,29 +23,54 @@ public class Game {
     public static final int NUMBER_OF_GOLD_COINS_TO_WON_AND_GAME_OVER = 6;
     public static final int MAX_NUMBER_OF_BYTES_WRITING_TO_ONE_FILE = 10000000;
     public static final int NUMBER_OF_FILES_TO_USE = 1;
-    public static final int NUMBER_OF_NEEDED_PLAYER = 4;//by j：游戏开始所必须的玩家数
+    public static final int NUMBER_OF_NEEDED_PLAYER = 2;//by j：游戏开始所必须的玩家数
 
     private final QuestionMaker questionMaker = new QuestionMaker();
 
     private ArrayList<Player> players = new ArrayList<Player>();
 
-    private int currentPlayer = 0;//当前轮到的player序号
+    private int currentPlayer = -1;//当前轮到的player序号
 
     private static Logger logger = Logger.getLogger("kata.trivia.Game");
     private static FileHandler fileHandler = null;
 
-    // by j：游戏状态 ： 0-非进行中  1-进行中 -1-游戏结束
+    // by j：游戏状态 ：-1-游戏结束 0-游戏准备阶段  1-游戏开始 2-显示骰子点数和问题 3-回答正确 4-回答错误
     private int status = 0;
     // by j：桌号
     private int tableId;
     // by j：一个bean，用来装游戏进行中，通过websocket更新的游戏状态
     private GameStatus gameStatus = null;
     // by j：用来给别的websocket发广播的，总控websocket
-    private WebSocketServer gameSocket = new WebSocketServer();
+    private WebSocketServer gameSocket = null;
 
     public Game(int tableId) {
         this.tableId = tableId;
+        gameSocket = new WebSocketServer();
+        gameSocket.addTable(this);
+        gameStatus = new GameStatus(this);
         logToAFile();
+    }
+
+    /* setters and getters */
+    public int getCurrentPlayerId() {
+        if (currentPlayer > 0){
+            return players.get(currentPlayer).getUser().getId();
+        } else {
+            return currentPlayer;
+        }
+
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Integer getTableId() {
+        return tableId;
+    }
+
+    public int getStatus() {
+        return status;
     }
 
     public void setPlayers(ArrayList<Player> players) {
@@ -76,14 +101,30 @@ public class Game {
         this.gameStatus = gameStatus;
     }
 
+
+
     /**
      * by j: 添加玩家，增加了user参数
      */
     public void add(String playerName, User user) {
 
         players.add(new Player(playerName, user));
-
+        boardcast(gameStatus.toString());
         logger.info(playerName + " was added");
+        logger.info("The total amount of players is " + players.size());
+    }
+
+    /**
+     * by j: 删除一个玩家
+     */
+    public void remove(int userId) {
+        for (Player player : players){
+            if (player.getUser().getId() == userId){
+                players.remove(player);
+                boardcast(gameStatus.toString());
+            }
+        }
+        logger.info(userId + " was exit before game start");
         logger.info("The total amount of players is " + players.size());
     }
 
@@ -93,8 +134,9 @@ public class Game {
     public void setReady(Integer userId) {
         for (Player player : players) {
             if (player.getUser().getId()==userId){
-                player.ready();
+                player.setIsReady(true);
                 logger.info(player.getUser().getUsername() + " was ready");
+                boardcast(gameStatus.toString());
                 return;
             }
         }
@@ -120,6 +162,7 @@ public class Game {
      */
     public void roll(int rollingNumber) {
         gameStatus.setDice(rollingNumber);
+        gameStatus.setStatus(2);
 
         logger.info(players.get(currentPlayer) + " is the current player");
         logger.info("They have rolled a " + rollingNumber);
@@ -192,7 +235,7 @@ public class Game {
 
 
         if (question!=null){
-            logger.info(question.getQ());
+            logger.info(question.getTitle());
         } else {
             logger.info("没有该类问题");
             question = new Question("没有该类问题,继续游戏请传null给本对象判断函数");
@@ -211,12 +254,12 @@ public class Game {
         //只有出错的情况会调这个分支
         if (players.get(currentPlayer).isInPenaltyBox()) {
             nextPlayer();
-            boolean theGameIsStillInProgress = true;
             boardcast("error");
             return;
         }
         if (currentPlayerGetsAGoldCoinAndSelectNextPlayer()){
             //还没有人赢，只更新位置和分数
+            gameStatus.setStatus(3);
             boardcast(gameStatus.toString());
         } else {
             //有人赢了，结算结果并更新游戏状态
@@ -266,6 +309,7 @@ public class Game {
 
         players.get(currentPlayer).sentToPenaltyBox();
         nextPlayer();
+        gameStatus.setStatus(4);
         boardcast(gameStatus.toString());
     }
 
@@ -300,7 +344,7 @@ public class Game {
     public boolean isAllPlayerReady(){
         boolean result = (players.size() > 0);
         for (Player player: players) {
-            result &= player.isReady();
+            result &= player.getIsReady();
         }
         return result;
     }
@@ -327,7 +371,8 @@ public class Game {
     public boolean startGame(){
         if (boardcast("start") == 0){
             status = 1;
-            gameStatus = new GameStatus(this);
+            currentPlayer = 0;
+            gameStatus.setCurrentPlayerId(players.get(currentPlayer).getUser().getId());
             gameStatus.setStatus(status);
             boardcast(gameStatus.toString());
             gameStatus.setFirstRound(false);
@@ -342,18 +387,21 @@ public class Game {
      *
      */
     public void endGame(){
-        System.out.println("--------------------游戏结束，开始结算--------------------");
+        logger.info("--------------------游戏结束，开始结算--------------------");
         status = -1;
         gameStatus.setStatus(status);
-        Player winner = players.get(0);
+        Player winner = null;
         for (Player player : players) {
-            System.out.println(player.toString() + " : " + player.countGoldCoins() +" 个金币");
-            if(player.countGoldCoins() > winner.countGoldCoins()){
+            logger.info(player.toString() + " : " + player.countGoldCoins() +" 个金币");
+            if(player.countGoldCoins() == 6){
                 winner = player;
             }
         }
+        gameStatus.setWinner(winner);
+        boardcast(gameStatus.toString());
+        gameSocket.removeTable(tableId);
         // do something to database
-        System.out.println("--------------------游戏结束，结算完毕--------------------");
+        logger.info("--------------------游戏结束，结算完毕--------------------");
     }
 
     /**
@@ -381,22 +429,7 @@ public class Game {
         return gameSocket.sendMessageToUser(target.getUser().getId(),msg);
     }
 
-    /* getters */
-    public int getCurrentPlayerId() {
-        return players.get(currentPlayer).getUser().getId();
-    }
 
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
-    public Integer getTableId() {
-        return tableId;
-    }
-
-    public int getStatus() {
-        return status;
-    }
 
     /* log */
     private void logToAFile() {

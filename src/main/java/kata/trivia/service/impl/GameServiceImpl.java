@@ -1,39 +1,46 @@
 package kata.trivia.service.impl;
 
+import kata.trivia.dao.QuestionDao;
 import kata.trivia.dto.Game;
 import kata.trivia.dto.Player;
 import kata.trivia.model.User;
 import kata.trivia.service.GameService;
 import kata.trivia.util.GameUtil;
+import kata.trivia.websocket.WebSocketServer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 /**
  * Created by joy12 on 2017/12/9.
- */@Service
+ */
+@Service
 public class GameServiceImpl implements GameService {
 
-    private Map<Integer,Game> tables = new HashMap<Integer, Game>();
+    @Autowired
+    QuestionDao questionDao;
+
+//    private Map<Integer,Game> tables = new HashMap<Integer, Game>();
 
     public List<Game> getAllTables() {
         List<Game> games = new ArrayList<Game>();
-        Game itable = null;
+        Map<Integer,Game> tables = WebSocketServer.getTables();
         // 限制最多只有5桌
-        for (int i = 0; i < 5; i++) {
-            if ((itable = tables.get(i))!=null){
+        for (int i=0; i<5; i++) {
+            Game itable = tables.get(i);
+            if (itable != null){
                 games.add(itable);
             } else {
                 games.add(new Game(i));
             }
         }
-        //games.addAll(tables.values());
         return games;
     }
 
     public List<Player> getPlayersByTable(int tableId) {
         List<Player> playerList = new ArrayList<Player>();
-        playerList.addAll(tables.get(tableId).getPlayers());
+        playerList.addAll(WebSocketServer.getTable(tableId).getPlayers());
         return playerList;
     }
 
@@ -44,11 +51,11 @@ public class GameServiceImpl implements GameService {
      * @return 是否加桌成功
      */
     public boolean userChooseTable(int tableId, User user) {
-        Game table = tables.get(tableId);
+        Game table = WebSocketServer.getTable(tableId);
         //如果是空桌，先把桌子加进map
         if (table == null){
             table = new Game(tableId);
-            tables.put(tableId,table);
+            WebSocketServer.addTable(table);
         }
 
         //若游戏不在进行中，且未满员，加桌成功
@@ -69,21 +76,23 @@ public class GameServiceImpl implements GameService {
      * @param userId
      */
     public void setPlayerReady(int tableId, int userId) {
-        Game table = tables.get(tableId);
+        Game table = WebSocketServer.getTable(tableId);
         table.setReady(userId);
         if (table.isEnoughPlayer() && table.isAllPlayerReady()){
-//            questionDao.getQuestions……
-//            table.prepareQuestions(?,?,?,?);
+            table.prepareQuestions(questionDao.selectByDomain("pop"),
+                    questionDao.selectByDomain("science"),
+                    questionDao.selectByDomain("sports"),
+                    questionDao.selectByDomain("rock"));
             table.startGame();
         }
     }
 
     public void stopDice(int tableId) {
-        tables.get(tableId).roll(GameUtil.runDice());
+        WebSocketServer.getTable(tableId).roll(GameUtil.runDice());
     }
 
     public void answerQuestion(int tableId, boolean isCorrect) {
-        Game table = tables.get(tableId);
+        Game table = WebSocketServer.getTable(tableId);
         if (isCorrect){
             table.answeredCorrectly();
         } else {

@@ -33,7 +33,7 @@ public class GameController {
      */
     @RequestMapping(value = "/tables")
     public ModelAndView toTables(){
-        ModelAndView mv = new ModelAndView("tables");
+        ModelAndView mv = new ModelAndView("game/tables");
         mv.addObject("tables",gameService.getAllTables());
         return mv;
     }
@@ -44,8 +44,9 @@ public class GameController {
      */
     @RequestMapping(value = "/gamePage")
     public ModelAndView toGamePage(@RequestParam("tableId") Integer tableId){
-        ModelAndView mv = new ModelAndView("game_page");
+        ModelAndView mv = new ModelAndView("game/game_page");
         mv.addObject("players",gameService.getPlayersByTable(tableId));
+        mv.addObject("tableId",tableId);
         return mv;
     }
 
@@ -61,11 +62,11 @@ public class GameController {
     public Result chooseTable(@RequestParam("tableId") Integer tableId, HttpSession session){
         Result result = new Result();
         User user = (User) session.getAttribute("user");
-        if (user==null){
-            user = new User("user1");
-            user.setId(1);
-            session.setAttribute("user",user);
-        }
+//        if (user==null){
+//            user = new User("user1");
+//            user.setId(1);
+//            session.setAttribute("user",user);
+//        }
         if (gameService.userChooseTable(tableId,user)){
             result.setSuccess(true);
         } else {
