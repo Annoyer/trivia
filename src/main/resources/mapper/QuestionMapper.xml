@@ -4,5 +4,8 @@
     <select id="selectAll">
         SELECT * FROM question
     </select>
+    <select id="selectByDomain">
+        SELECT * FROM question WHERE domain=#{domain};
+    </select>
 
 </mapper>

@@ -4,39 +4,72 @@ package kata.trivia.model;
  * Created by joy12 on 2017/12/9.
  */
 public class Question {
-    private String q;
-    private String a;
+    private int id;
+    private String title;
+    private String domain;
+    private String answers;
+    private String rightAnswer;
+    private int level;
+
+    public Question(int id, String title, String domain, String answers, String rightAnswer, int level) {
+        this.id = id;
+        this.title = title;
+        this.domain = domain;
+        this.answers = answers;
+        this.rightAnswer = rightAnswer;
+        this.level = level;
+    }
+
+    public int getId() {
+
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public String getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(String answers) {
+        this.answers = answers;
+    }
+
+    public String getRightAnswer() {
+        return rightAnswer;
+    }
+
+    public void setRightAnswer(String rightAnswer) {
+        this.rightAnswer = rightAnswer;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
     public Question() {
     }
 
-    public Question(String q, String a) {
-        this.q = q;
-        this.a = a;
-    }
-
-    public Question(String msg){
-        q = msg;
-        a = "";
-    }
-
-    public String getQ() {
-        return q;
-    }
-
-    public void setQ(String q) {
-        this.q = q;
-    }
-
-    public String getA() {
-        return a;
-    }
-
-    public void setA(String a) {
-        this.a = a;
-    }
-
-    public boolean isCorrectAnswer(String ans){
-        return a.equals(ans);
-    }
 }
