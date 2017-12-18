@@ -12,4 +12,6 @@ public interface UserDao {
     User getUser(@Param("username") String username,@Param("password") String password);
     User getUserById(@Param("id") int id);
     User getUserByNickName(@Param("username") String username);
+    int updateWinCountAndLevel(@Param("id") int id,@Param("winCount") int winCount, @Param("level") int level);
+    int updateLoseCount(@Param("id") int id,@Param("loseCount") int loseCount);
 }

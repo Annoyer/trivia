@@ -8,17 +8,28 @@
         INSERT INTO player(username,password)
       VALUES (#{username},#{password})
     </insert>
-    <select id="getUser" parameterType="java.lang.String" resultType="User">
+    <update id="updateWinCountAndLevel">
+        UPDATE player
+        SET win_count=#{winCount}, level=#{level}
+        WHERE id=#{id}
+    </update>
+    <update id="updateLoseCount">
+        UPDATE player
+        SET lose_count=#{loseCount}
+        WHERE id=#{id}
+    </update>
+    <select id="getUser" parameterType="java.lang.String" resultType="kata.trivia.model.User">
         SELECT * FROM player
         WHERE username=#{username} AND password=#{password}
     </select>
-    <select id="getUserByNickName" parameterType="java.lang.String" resultType="User">
+    <select id="getUserByNickName" parameterType="java.lang.String" resultType="kata.trivia.model.User">
         SELECT * FROM player
         WHERE username=#{username}
     </select>
-    <select id="getUserById" parameterType="java.lang.Integer" resultType="User">
+    <select id="getUserById" parameterType="java.lang.Integer" resultType="kata.trivia.model.User">
         SELECT * FROM player
         WHERE id=#{id}
     </select>
+
 
 </mapper>

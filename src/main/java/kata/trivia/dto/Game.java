@@ -106,9 +106,8 @@ public class Game {
     /**
      * by j: 添加玩家，增加了user参数
      */
-    public void add(String playerName, User user) {
-
-        players.add(new Player(playerName, user));
+    public void add(String playerName, User user, int initialPlace) {
+        players.add(new Player(playerName, user, initialPlace));
         boardcast(gameStatus.toString());
         logger.info(playerName + " was added");
         logger.info("The total amount of players is " + players.size());

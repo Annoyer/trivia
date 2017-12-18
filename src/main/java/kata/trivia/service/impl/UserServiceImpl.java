@@ -29,4 +29,18 @@ public class UserServiceImpl implements UserService {
     public User login(User user){
         return userDao.getUser(user.getUsername(),user.getPassword());
     }
+
+    public boolean countWinLose(User user, boolean isWinner) {
+        if (isWinner){
+            int winCount = user.getWinCount()+1;
+            int level = user.getLevel();
+            if (winCount == level+level*(level-1)*0.5){//d=1的等差数列（1 2 3 4 5 6……）
+                level++;
+            }
+            userDao.updateWinCountAndLevel(user.getId(),winCount,level);
+        } else {
+            userDao.updateLoseCount(user.getId(),user.getLoseCount()+1);
+        }
+        return false;
+    }
 }

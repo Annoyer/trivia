@@ -10,4 +10,5 @@ import kata.trivia.model.User;
 public interface UserService {
     User signup(User user);
     User login(User user);
+    boolean countWinLose(User user, boolean isWinner);
 }

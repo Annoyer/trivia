@@ -25,7 +25,7 @@ public class Player {
     public static final String ROCK = "Rock";
 
     private String playerName;
-    private int place = 0;
+    private int place = 0; //当前玩家的初始位置
     private int sumOfGoldCoins = 0;
     private boolean isInPenaltyBox = false;
 
@@ -74,9 +74,10 @@ public class Player {
      * @param playerName username
      * @param user user
      */
-    public Player(String playerName,User user) {
+    public Player(String playerName,User user,int initialPlace) {
         this.playerName = playerName;
         this.user = user;
+        this.place = initialPlace;
     }
 
     public boolean getIsReady() {

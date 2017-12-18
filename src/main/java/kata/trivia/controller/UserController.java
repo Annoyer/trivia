@@ -83,4 +83,21 @@ public class UserController {
         }
     }
 
+    /**
+     * 记录胜率、升级
+     */
+    @RequestMapping(value = "/recordGameResult",method = RequestMethod.POST)
+    @ResponseBody
+    public Result record(@RequestParam(value = "isWinner") boolean isWinner,HttpSession session) {
+        Result result = new Result();
+        User user = (User) session.getAttribute("user");
+        if (userService.countWinLose(user,isWinner)){
+            result.setSuccess(true);
+        } else {
+            result.setSuccess(false);
+            result.setError("记录胜率失败");
+        }
+        return result;
+    }
+
 }

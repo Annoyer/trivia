@@ -16,7 +16,7 @@ public interface GameService {
 
     List<Player> getPlayersByTable(int tableId);
 
-    boolean userChooseTable(int tableId, User user);
+    boolean userChooseTable(int tableId, User user, int initialPlace);
 
     void setPlayerReady(int tableId, int playerId);
 

@@ -59,7 +59,7 @@ public class GameController {
      */
     @RequestMapping(value = "/chooseTable",method = RequestMethod.POST)
     @ResponseBody
-    public Result chooseTable(@RequestParam("tableId") Integer tableId, HttpSession session){
+    public Result chooseTable(@RequestParam("tableId") int tableId,@RequestParam("initialPlace") int initialPlace, HttpSession session){
         Result result = new Result();
         User user = (User) session.getAttribute("user");
 //        if (user==null){
@@ -67,7 +67,7 @@ public class GameController {
 //            user.setId(1);
 //            session.setAttribute("user",user);
 //        }
-        if (gameService.userChooseTable(tableId,user)){
+        if (gameService.userChooseTable(tableId,user,initialPlace)){
             result.setSuccess(true);
         } else {
             result.setSuccess(false);

@@ -17,7 +17,11 @@ public class LoginFliter implements Filter {
     public static List<String> pattenURL = new ArrayList<String>();
 
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        pattenURL.add("user/index");
+        pattenURL.add("user/loginPage");
+        pattenURL.add("user/login");
+        pattenURL.add("user/signupPage");
+        pattenURL.add("user/signup");
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

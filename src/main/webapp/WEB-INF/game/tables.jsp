@@ -25,11 +25,13 @@
 <script type="text/javascript">
     function chooseTable(id) {
         alert(id);
+        var initialPlace = 0;
         $.ajax({
             method: 'POST',
             url: '${path}/game/chooseTable',
             data: {
-                tableId: id
+                tableId: id,
+                initialPlace: initialPlace
             },
             dataType: "json",
             success: function (data) {

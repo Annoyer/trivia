@@ -50,7 +50,7 @@ public class GameServiceImpl implements GameService {
      * @param user
      * @return 是否加桌成功
      */
-    public boolean userChooseTable(int tableId, User user) {
+    public boolean userChooseTable(int tableId, User user, int initialPlace) {
         Game table = WebSocketServer.getTable(tableId);
         //如果是空桌，先把桌子加进map
         if (table == null){
@@ -60,7 +60,7 @@ public class GameServiceImpl implements GameService {
 
         //若游戏不在进行中，且未满员，加桌成功
         if (!table.isEnoughPlayer() && !table.isGameStart()){
-            table.add(user.getUsername(),user);//table会生成player
+            table.add(user.getUsername(),user,initialPlace);//table会生成player
             return true;
         }
         //游戏满员或正在进行，加桌失败

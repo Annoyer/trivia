@@ -150,8 +150,28 @@
                             $("#statusDiv").html("游戏结束,没有人获胜");
                         } else {
                             $("#statusDiv").html("游戏结束,胜者是：" + gameStatus.winner.playerName);
-                            websocket.close();
-                            websocket = null;
+                            var isWinner = (gameStatus.winner.user.id == ${sessionScope.user.id});
+                            $.ajax({
+                                method: 'POST',
+                                url: '${path}/user/recordGameResult',
+                                data: {
+                                    isWinner: isWinner
+                                },
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.success!=true){
+                                        alert(data.error);
+                                    }
+                                    websocket.close();
+                                    websocket = null;
+                                },
+                                error:function () {
+                                    alert("请求出错！");
+                                    websocket.close();
+                                    websocket = null;
+                                }
+                            });
+
                         }
                     }
                 }
